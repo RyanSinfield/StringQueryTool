@@ -175,7 +175,7 @@ class StringQueryTool:
                 elif isinstance(ele,list):
                     raise InvalidQueryException("Query incorrectly formatted")
                 else:
-                    if ele.lower() not in haystack.lower(): return False
+                    if ele.lower().strip() not in haystack.lower(): return False
         elif operator == "or":
             matched = False
             for ele in pattern_list:
