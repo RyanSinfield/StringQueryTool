@@ -128,9 +128,6 @@ class StringQueryTool:
         first=True
         for operator in operators:
             if operator in query_part:
-                print(query_part)
-                print(first)
-                print(len(query_part[operator]))
                 needs_brackets = not first_stmt and len(query_part[operator]) > 1
                 if not first:
                     stmt += " `%s` " %operator.upper()
