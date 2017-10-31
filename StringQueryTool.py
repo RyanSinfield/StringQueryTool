@@ -66,7 +66,6 @@ class StringQueryTool:
         query_node = self._create_dict(query_string)
         query.append(query_node)
         query = self._remap_query(query,query_map)
-        print(query)
         return query
 
     def _create_dict(self, query_string):
