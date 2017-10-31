@@ -117,35 +117,42 @@ class StringQueryTool:
     def gen_stmt(self):
         """ Build a query statement in readable text and return it """
         stmt = ""
-        for query_part in self.query:
+        for i,query_part in enumerate(self.query):
             if isinstance(query_part,dict):
-                stmt += self._from_dict(query_part)
+                stmt += self._from_dict(query_part,i==0)
         return stmt
         
-    def _from_dict(self, query_part):
+    def _from_dict(self, query_part, first_stmt):
         stmt = ""
         operators = ["and","or"]
         first=True
         for operator in operators:
             if operator in query_part:
+                print(query_part)
+                print(first)
+                print(len(query_part[operator]))
+                needs_brackets = not first_stmt and len(query_part[operator]) > 1
                 if not first:
-                    stmt += " %s " %operator
+                    stmt += " `%s` " %operator.upper()
+                if needs_brackets:
+                    stmt += "("
                 stmt += self._add_clause(query_part[operator],operator)
+                if needs_brackets:
+                    stmt += ")"
                 first=False
         return stmt
 
     def _add_clause(self, query_part, operator):
-        stmt = "("
+        stmt = ""
         first=True
         for ele in query_part:
             if not first:
-                stmt += " %s " %operator
+                stmt += " `%s` " %operator.upper()
             if isinstance(ele,dict):
-                stmt += self._from_dict(ele)
+                stmt += self._from_dict(ele, False)
             else:
                 stmt += ele
             first=False
-        stmt += ")"
         return stmt
 
     def is_match(self, haystack):
